@@ -12,7 +12,7 @@ public class FilterConfig {
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
                 // rental-service
-                .route(p -> p.path("/rental/**").uri("lb://RENTAL-SERVICE"))
+                .route(p -> p.path("/rental/**", "/insurance/**").uri("lb://RENTAL-SERVICE"))
                 .build();
     }
 }
