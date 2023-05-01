@@ -56,4 +56,5 @@ jobs:
             docker rmi ${{secrets.DOCKERHUB_USERNAME}}/api-gateway
             docker pull ${{secrets.DOCKERHUB_USERNAME}}/api-gateway
             docker run --name api-gateway -d -p 80:8000 ${{secrets.DOCKERHUB_USERNAME}}/api-gateway
+            docker network connect msa-net api-gateway
             docker ps
