@@ -51,6 +51,6 @@ jobs:
           key: ${{ secrets.SSH_KEY}}
           port: ${{ secrets.PORT }}
           script: |
-            docker-compose -f docker-compose.api-gateway.yml down --rmi
+            docker-compose -f docker-compose.api-gateway.yml down --rmi all
             docker-compose -f docker-compose.api-gateway.yml up -d
             docker ps
