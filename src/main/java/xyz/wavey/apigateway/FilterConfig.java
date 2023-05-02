@@ -13,6 +13,9 @@ public class FilterConfig {
         return builder.routes()
                 // rental-service
                 .route(p -> p.path("/rental/**", "/insurance/**").uri("lb://RENTAL-SERVICE"))
+                // user-service
+                .route(p -> p.path("/auth/**").uri("lb://USER-SERVICE"))
                 .build();
+
     }
 }
