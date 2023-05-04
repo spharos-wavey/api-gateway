@@ -15,10 +15,10 @@ public class FilterConfig {
                 // rental-service
                 .route(p -> p.path("/rental/**", "/insurance/**").uri("lb://RENTAL-SERVICE"))
                 // user-service
-                .route(p -> p.path("/auth/kakao").uri("lb://USER-SERVICE"))
-                .route(p -> p.path("/auth/**")
-                        .filters(f -> f.filters(authorizationHeaderFilter.apply(config -> {})))
-                        .uri("lb://USER-SERVICE"))
+                .route(p -> p.path("/auth/kakao/**").uri("lb://USER-SERVICE"))
+//                .route(p -> p.path("/auth/**")
+//                        .filters(f -> f.filters(authorizationHeaderFilter.apply(config -> {})))
+//                        .uri("lb://USER-SERVICE"))
                 .build();
 
     }
