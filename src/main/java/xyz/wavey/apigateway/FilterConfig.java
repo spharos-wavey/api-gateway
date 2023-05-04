@@ -20,7 +20,9 @@ public class FilterConfig {
 //                        .filters(f -> f.filters(authorizationHeaderFilter.apply(config -> {})))
 //                        .uri("lb://USER-SERVICE"))
                 // vehicle-service
-                .route(p -> p.path("/vehicle/**").uri("lb://VEHICLE-SERVICE"))
+                .route(p ->
+                        p.path("/vehicle/**", "/frame/**", "/billitazone/**", "/booklist/**", "/review/**")
+                                .uri("lb://VEHICLE-SERVICE"))
                 .build();
 
     }
