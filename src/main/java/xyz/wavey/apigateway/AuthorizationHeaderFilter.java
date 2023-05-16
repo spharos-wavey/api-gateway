@@ -26,8 +26,8 @@ import java.util.Date;
 import java.util.function.Function;
 
 
-import static xyz.wavey.apigateway.exception.ErrorCode.INVALID_TOKEN;
-import static xyz.wavey.apigateway.exception.ErrorCode.MISSING_AUTH_TOKEN;
+import static xyz.wavey.apigateway.exception.ErrorCode.*;
+
 
 
 @Component
