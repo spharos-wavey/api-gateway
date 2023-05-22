@@ -21,7 +21,7 @@ public class FilterConfig {
 //                        .uri("lb://USER-SERVICE"))
                 // vehicle-service
                 .route(p ->
-                        p.path("/vehicle/**", "/frame/**", "/billitazone/**", "/booklist/**", "/review/**")
+                        p.path("/vehicle/**", "/frame/**", "/billitazone/**", "/booklist/**", "/review/**", "/maker/**")
                                 .uri("lb://VEHICLE-SERVICE"))
                 .build();
 
