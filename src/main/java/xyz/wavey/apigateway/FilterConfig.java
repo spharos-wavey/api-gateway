@@ -13,15 +13,19 @@ public class FilterConfig {
             , AuthorizationHeaderFilter authorizationHeaderFilter) {
         return builder.routes()
                 // rental-service
-                .route(p -> p.path("/rental/**", "/insurance/**").filters(f -> f.filters(authorizationHeaderFilter.apply(config -> {}))).uri("lb://RENTAL-SERVICE"))
+                .route(p ->
+                        p.path("/rental/**", "/insurance/**")
+                                .filters(f -> f.filters(authorizationHeaderFilter.apply(config -> {})))
+                                .uri("lb://RENTAL-SERVICE"))
                 // user-service
                 .route(p -> p.path("/auth/**").uri("lb://USER-SERVICE"))
-//                .route(p -> p.path("/auth/**")
-//                        .filters(f -> f.filters(authorizationHeaderFilter.apply(config -> {})))
-//                        .uri("lb://USER-SERVICE"))
                 // vehicle-service
                 .route(p ->
-                        p.path("/vehicle/**", "/frame/**", "/billitazone/**", "/booklist/**", "/review/**", "/maker/**")
+                        p.path("/booklist/**")
+                                .filters(f -> f.filters(authorizationHeaderFilter.apply(config -> {})))
+                                .uri("lb://VEHICLE-SERVICE"))
+                .route(p ->
+                        p.path("/vehicle/**", "/frame/**", "/billitazone/**", "/review/**", "/maker/**")
                                 .uri("lb://VEHICLE-SERVICE"))
                 .build();
 
