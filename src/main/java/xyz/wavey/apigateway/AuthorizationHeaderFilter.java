@@ -1,5 +1,7 @@
 package xyz.wavey.apigateway;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -22,21 +24,24 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.function.Function;
 
-
 import static xyz.wavey.apigateway.exception.ErrorCode.*;
-
-
 
 @Component
 @Slf4j
 public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
-
-    @Value("${SECRET_KEY}")
+    @Value("${jwt.SECRET_KEY}")
     private String SECRET_KEY;
+
+    @Value("${jwt.ISSUER}")
+    private String ISS;
+
+    @Value("${jwt.AUDIENCE}")
+    private String AUD;
 
     Environment env;
 
@@ -63,8 +68,6 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         };
     }
 
-
-
     private Mono<Void> onError(ServerWebExchange exchange, String errMessage , HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
@@ -74,18 +77,36 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
         return response.writeWith(Flux.just(buffer));
     }
 
-
-
-
     private boolean isJwtValid(String jwt) {
-        return (!isTokenExpired(jwt));
+        String[] jwtSplit = jwt.split("[.]");
+        String payload = jwtSplit[1];
+        return (isPayloadValid(payload) && !isTokenExpired(jwt));
     }
-
 
     public <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(jwt);
         return claimsResolver.apply(claims);
     }
+
+    private boolean isPayloadValid(String payload) {
+        boolean returnValue = true;
+
+        try {
+            Base64.Decoder decoder = Base64.getDecoder();
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(new String(decoder.decode(payload.getBytes())));
+
+            if (!element.getAsJsonObject().get("iss").getAsString().equals(ISS) ||
+                    !element.getAsJsonObject().get("aud").getAsString().equals(AUD)) {
+                returnValue = false;
+            }
+        } catch (Exception e) {
+            returnValue = false;
+        }
+
+        return returnValue;
+    }
+
     private Boolean isTokenExpired(String jwt) {
         return extractExpiration(jwt).before(new Date());
     }
