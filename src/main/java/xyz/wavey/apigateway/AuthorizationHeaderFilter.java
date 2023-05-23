@@ -78,9 +78,11 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     }
 
     private boolean isJwtValid(String jwt) {
-        String[] jwtSplit = jwt.split("[.]");
-        String payload = jwtSplit[1];
-        return (isPayloadValid(payload) && !isTokenExpired(jwt));
+        log.info(jwt);
+//        String[] jwtSplit = jwt.split("[.]");
+//        String payload = jwtSplit[1];
+//        return (isPayloadValid(payload) && !isTokenExpired(jwt));
+        return !isTokenExpired(jwt);
     }
 
     public <T> T extractClaim(String jwt, Function<Claims, T> claimsResolver) {
