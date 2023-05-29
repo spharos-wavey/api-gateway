@@ -14,7 +14,7 @@ public class FilterConfig {
         return builder.routes()
                 // rental-service
                 .route(p ->
-                        p.path("/rental/**", "/insurance/**")
+                        p.path("/rental/**", "/insurance/**", "/purchase/**")
                                 .filters(f -> f.filters(authorizationHeaderFilter.apply(config -> {})))
                                 .uri("lb://RENTAL-SERVICE"))
                 // user-service
