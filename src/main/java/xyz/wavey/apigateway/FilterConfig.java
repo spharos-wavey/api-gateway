@@ -27,6 +27,9 @@ public class FilterConfig {
                 .route(p ->
                         p.path("/vehicle/**", "/frame/**", "/billitazone/**", "/review/**", "/carbrand/**")
                                 .uri("lb://VEHICLE-SERVICE"))
+                // board-service
+                .route(p -> p.path("/blog/**", "/category/**", "/comment/**", "/like/**", "/reply/**", "/tag/**", "/tag-list/**")
+                        .uri("lb://BOARD-SERVICE"))
                 .build();
 
     }
